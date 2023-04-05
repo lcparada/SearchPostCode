@@ -1,4 +1,4 @@
-import Home from "./src/Home";
+import Home from "./src/pages/Home";
 
 import { UserProvider } from "./src/context/UserData";
 
