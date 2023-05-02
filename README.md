@@ -1,3 +1,5 @@
 Project to search Post Code!
 
-![ezgif-1-7ff3bdf2b9](https://user-images.githubusercontent.com/125614063/235683919-e2c2cc22-1486-43ee-b582-9dacc4958699.gif)
+<img src="https://user-images.githubusercontent.com/125614063/235684821-09287823-6820-4ee0-9f15-0fe654e26539.gif" width="300" height="500">
+
+
