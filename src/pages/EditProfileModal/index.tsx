@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   TextInput,
   ScrollView,
+  ActivityIndicator,
 } from "react-native";
 
 import { useState, useContext, useEffect } from "react";
@@ -16,12 +17,11 @@ import { BlurView } from "expo-blur";
 
 import styles from "./styles";
 
-import { UserContextData } from "../context/UserData";
+import { UserContextData } from "../../context/UserData";
 
 import * as Location from "expo-location";
 
-import { firstName } from "../helpers";
-
+import { firstName } from "../../helpers";
 type Props = {
   isEnabled: boolean;
   openEditProfileScreen: () => void;
@@ -36,10 +36,12 @@ export default function EditProfileModal(props: Props) {
   const [state, setState] = useState<string>("");
   const [neighborhood, setNeighborhood] = useState<string>("");
   const [street, setStreet] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
 
   const [image, setImage] = useState<string | null>(null);
 
   async function getPermissions(): Promise<void> {
+    setLoading(true);
     try {
       let { status } = await Location.requestForegroundPermissionsAsync();
       console.log(status);
@@ -54,6 +56,7 @@ export default function EditProfileModal(props: Props) {
         setState(adress[0].region ?? "");
         setNeighborhood(adress[0]?.district ?? "");
         setStreet(adress[0]?.street ?? "");
+        setLoading(false);
       }
     } catch (error) {
       console.log(error);
@@ -144,82 +147,95 @@ export default function EditProfileModal(props: Props) {
               ></TextInput>
             </View>
 
-            <View style={styles.rest}>
-              <Text style={styles.textRest}>CEP:</Text>
-              <TextInput
-                style={styles.inputRest}
-                placeholder="Digite seu cep aqui!"
-                placeholderTextColor="white"
-                value={cep as string}
-                onChangeText={setCep}
-              ></TextInput>
-              <View style={styles.unknowCep}>
-                <Text style={styles.textUnknowCep}>Não sabe qual seu cep?</Text>
-                <TouchableOpacity onPress={getPermissions}>
-                  <Text
-                    style={{
-                      color: "#274690",
-                      fontFamily: "Lexend_700Bold",
-                      textAlign: "center",
-                    }}
+            {loading ? (
+              <ActivityIndicator
+                size={50}
+                color="#333333"
+                style={{ marginTop: 100 }}
+              />
+            ) : (
+              <View style={{ alignItems: "center" }}>
+                <View style={styles.rest}>
+                  <Text style={styles.textRest}>CEP:</Text>
+                  <TextInput
+                    style={styles.inputRest}
+                    placeholder="Digite seu cep aqui!"
+                    placeholderTextColor="white"
+                    value={cep as string}
+                    onChangeText={setCep}
+                  ></TextInput>
+                  <View style={styles.unknowCep}>
+                    <Text style={styles.textUnknowCep}>
+                      Não sabe qual seu cep?
+                    </Text>
+                    <TouchableOpacity onPress={getPermissions}>
+                      <Text
+                        style={{
+                          color: "#274690",
+                          fontFamily: "Lexend_700Bold",
+                          textAlign: "center",
+                        }}
+                      >
+                        Toque aqui!
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+
+                <View style={styles.rest}>
+                  <Text style={styles.textRest}>Cidade:</Text>
+                  <TextInput
+                    style={styles.inputRest}
+                    placeholder="Digite sua cidade aqui!"
+                    placeholderTextColor="white"
+                    value={city as string}
+                    onChangeText={setCity}
+                  ></TextInput>
+                </View>
+
+                <View style={styles.rest}>
+                  <Text style={styles.textRest}>Estado:</Text>
+                  <TextInput
+                    style={styles.inputRest}
+                    placeholder="Digite seu estado aqui!"
+                    placeholderTextColor="white"
+                    value={state as string}
+                    onChangeText={setState}
+                  ></TextInput>
+                </View>
+
+                <View style={styles.rest}>
+                  <Text style={styles.textRest}>Bairro:</Text>
+                  <TextInput
+                    style={styles.inputRest}
+                    placeholder="Digite seu bairro aqui!"
+                    placeholderTextColor="white"
+                    value={neighborhood as string}
+                    onChangeText={setNeighborhood}
+                  ></TextInput>
+                </View>
+
+                <View style={styles.rest}>
+                  <Text style={styles.textRest}>Rua com número:</Text>
+                  <TextInput
+                    style={styles.inputRest}
+                    placeholder="Digite seu bairro aqui!"
+                    placeholderTextColor="white"
+                    value={street as string}
+                    onChangeText={setStreet}
+                  ></TextInput>
+                </View>
+
+                <View style={styles.containerButton}>
+                  <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => props.openEditProfileScreen()}
                   >
-                    Toque aqui!
-                  </Text>
-                </TouchableOpacity>
+                    <Text style={styles.textButton}>Salvar</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
-            </View>
-
-            <View style={styles.rest}>
-              <Text style={styles.textRest}>Cidade:</Text>
-              <TextInput
-                style={styles.inputRest}
-                placeholder="Digite sua cidade aqui!"
-                placeholderTextColor="white"
-                value={city as string}
-                onChangeText={setCity}
-              ></TextInput>
-            </View>
-
-            <View style={styles.rest}>
-              <Text style={styles.textRest}>Estado:</Text>
-              <TextInput
-                style={styles.inputRest}
-                placeholder="Digite seu estado aqui!"
-                placeholderTextColor="white"
-                value={state as string}
-                onChangeText={setState}
-              ></TextInput>
-            </View>
-
-            <View style={styles.rest}>
-              <Text style={styles.textRest}>Bairro:</Text>
-              <TextInput
-                style={styles.inputRest}
-                placeholder="Digite seu bairro aqui!"
-                placeholderTextColor="white"
-                value={neighborhood as string}
-                onChangeText={setNeighborhood}
-              ></TextInput>
-            </View>
-
-            <View style={styles.rest}>
-              <Text style={styles.textRest}>Rua com número:</Text>
-              <TextInput
-                style={styles.inputRest}
-                placeholder="Digite seu bairro aqui!"
-                placeholderTextColor="white"
-                value={street as string}
-                onChangeText={setStreet}
-              ></TextInput>
-            </View>
-            <View style={styles.containerButton}>
-              <TouchableOpacity
-                style={styles.button}
-                onPress={() => props.openEditProfileScreen()}
-              >
-                <Text style={styles.textButton}>Salvar</Text>
-              </TouchableOpacity>
-            </View>
+            )}
           </View>
         </ScrollView>
       </BlurView>
