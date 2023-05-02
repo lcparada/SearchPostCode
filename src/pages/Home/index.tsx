@@ -116,7 +116,7 @@ export default function Home() {
           style={styles.inputCEP}
           cursorColor="white"
           keyboardType="numeric"
-          placeholder="Ex: 23540003"
+          placeholder="Ex: 89237781"
           value={getCEP}
           onChangeText={setGetCEP}
           placeholderTextColor="white"
